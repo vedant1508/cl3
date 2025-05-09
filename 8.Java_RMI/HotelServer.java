@@ -17,33 +17,42 @@ public class HotelServer extends UnicastRemoteObject implements HotelInterface {
     @Override
     public synchronized String bookRoom(String guestName) throws RemoteException {
         if (bookedGuests.contains(guestName)) {
-            return "Room already booked for " + guestName;
+            String message = "Room already booked for " + guestName;
+            System.out.println("[Server Log] " + message);
+            return message;
         }
         bookedGuests.add(guestName);
-        return "Room successfully booked for " + guestName;
+        String message = "Room successfully booked for " + guestName;
+        System.out.println("[Server Log] " + message);
+        return message;
     }
 
     @Override
     public synchronized String cancelBooking(String guestName) throws RemoteException {
         if (bookedGuests.remove(guestName)) {
-            return "Booking canceled for " + guestName;
+            String message = "Booking canceled for " + guestName;
+            System.out.println("[Server Log] " + message);
+            return message;
         } else {
-            return "No booking found for " + guestName;
+            String message = "No booking found for " + guestName;
+            System.out.println("[Server Log] " + message);
+            return message;
         }
     }
 
     public static void main(String[] args) {
         try {
             HotelServer obj = new HotelServer();
-            Registry registry = LocateRegistry.createRegistry(1099); // default port
+            Registry registry = LocateRegistry.createRegistry(1099); // default RMI port
             registry.rebind("HotelService", obj);
-            System.out.println("Hotel Server is running...");
+            System.out.println("[Server Log] Hotel Server is running...");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 }
+
 // javac *.java
 // java HotelServer
-// New Terminal
+// New Terminal 
 // java HotelClient
